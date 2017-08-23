@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.lovo.mapper.UserMapper">
+<sql id="useWhere">
+<where>
+<if test="userName!=null and userName!=''">
+ and user_name like "%${userName}%"
+</if>
+</where>
+</sql>
+<resultMap type="UserBean" id="userMap">
+<id property = "userId" column="user_id" javaType="int"/>
+<result property = "userName" column = "user_name" javaType="java.lang.String"/>
+<result property = "userPwd" column = "user_pwd" javaType="java.lang.String"/>
+<result property="userEmail" column = "user_email" javaType="java.lang.String"></result>
+<result property="userPhone" column="user_phone" javaType="java.lang.String"></result>
+</resultMap>
+<select id="findAllUserByPage" resultMap="userMap">
+select * from t_user 
+<include refid="useWhere">
+ </include>
+ limit #{pageBean.startNumber},#{pageBean.pageSize}
+</select>
+<select id="findUserNumsByPage" resultType="int">
+select count(*) from t_user
+<include refid="useWhere">
+ </include>
+</select>
+</mapper>
+
